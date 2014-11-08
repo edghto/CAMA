@@ -16,7 +16,7 @@ typedef enum
 
 typedef struct
 {
-	USI_SPI_Mode mode;
+	USI_SPI_Mode_t mode;
 	unsigned char isSlave; /* 0 - Master, 1 - Slave */
 	unsigned char isNCS;   /* if 1 then transistion of SS pin from high to low enables transmission */
 	USI_SPI_SS_t ssPin;    /* pin used as Slave Select */
@@ -24,7 +24,7 @@ typedef struct
 } USI_SPI_Config_t;
 
 /* Initialize interrupt driven SPI */
-void USI_SPI_Init( USI_SPI_Config_t& config );
+void USI_SPI_Init( USI_SPI_Config_t* config );
 
 unsigned char USI_SPI_TransferByte( unsigned char msg );
 
