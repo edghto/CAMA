@@ -5,7 +5,7 @@
 
 static unsigned char isSelected = 0;
 
-void spi_init( void )
+void USI_SPI_Init( USI_SPI_Config_t* config )
 {
 	USICR = _BV(USIWM0) | _BV(USICS1);
 
@@ -19,7 +19,7 @@ void spi_init( void )
 	DDRB |= _BV(PB2);
 }
 
-unsigned char spi_transfer_byte( unsigned char msg )
+unsigned char USI_SPI_TransferByte( unsigned char msg )
 {
     USISR = 0xf0;         // reset counter to 0 and clears all flags
     USIDR = msg;
@@ -33,7 +33,7 @@ unsigned char spi_transfer_byte( unsigned char msg )
     return USIDR;
 }
 
-unsigned char spi_transfer( unsigned char* msg, unsigned int msg_size )
+unsigned char USI_SPI_Transfer( unsigned char* msg, unsigned int msg_size )
 {
     do
     {
