@@ -68,8 +68,8 @@ verify:
 	-@avrdude $(AVRDUDE_FLAGS) -v
 
 clean:
-	-@echo rm -f $(OBJS)
-	-@rm -f $(OBJS)
+	-@echo rm -f $(OBJS) $(LIBS)
+	-@rm -f $(OBJS) $(LIBS)
 	-@echo rm -f *.elf
 	-@rm -f *.elf
 	-@echo rm -f *.hex
