@@ -2,9 +2,14 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+unsigned char USI_SPI_callback( unsigned char data )
+{
+	return ~data;
+}
+
 int main( int argc, char* argv[] )
 {
-	spi_init();
+	USI_SPI_Init();
 	sei();
 
 	for(;;) _delay_ms(1000);
