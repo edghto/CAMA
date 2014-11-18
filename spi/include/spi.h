@@ -7,12 +7,21 @@
 #define USI_SPI_USCK _BV(PB7)
 
 /*
+ * Delay in miliseconds between transfer of next byte.
+ * Only for Master mode, but make notice, that for correct working, 
+ * Slave mode also requires some delay, but it have to be managed 
+ * by master.
+ */
+#define USI_SPI_BYTE_DELAY 200
+
+/*
  * Uncomment define USI_SPI_SLAVE_MODE to enable SPI slave mode.
  * By default driver works as Master.
  */
-#define USI_SPI_SLAVE_MODE
+//#define USI_SPI_SLAVE_MODE
 
 /*
+ * This has effect only in Slave mode.
  * This is interrutpt driven implementation, so interrupt pin is
  * needed to notify uC about transmission.
  * To do that a Slave Select Pin needs to be configured.
@@ -65,7 +74,9 @@
  * The parameter is 8bit data received thru SPI. It should 
  * return 8bit that should be transmitted back to Master.
  */
+#ifdef USI_SPI_SLAVE_MODE
 unsigned char USI_SPI_callback( unsigned char data );
+#endif
 
 /* Initialize interrupt driven SPI */
 void USI_SPI_Init( void );

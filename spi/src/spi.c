@@ -3,6 +3,8 @@
 #include <avr/interrupt.h>
 #include <spi.h>
 
+#ifdef USI_SPI_SLAVE_MODE
+
 static inline unsigned char isSelected()
 {
 	unsigned char s;
@@ -20,6 +22,8 @@ static inline unsigned char isSelected()
 	return 0 != s;
 #endif
 }
+
+#endif  /* end of USI_SPI_SLAVE_MODE */
 
 void USI_SPI_Init( void )
 {
@@ -62,6 +66,7 @@ unsigned char USI_SPI_TransferByte( unsigned char msg )
     do
     {
         USICR |= _BV(USITC);
+//		USICR = _BV(USIWM0) | _BV(USICS1) | _BV(USICLK) | _BV(USITC);
     } while( !( USISR & _BV(USIOIF) ) );
 
     return USIDR;
@@ -73,10 +78,13 @@ unsigned char USI_SPI_Transfer( unsigned char* msg, unsigned int msg_size )
     {
         *msg = USI_SPI_TransferByte( *msg );
         ++msg;
+		_delay_ms( USI_SPI_BYTE_DELAY );
     } while (--msg_size);
 
     return 0;
 }
+
+#ifdef USI_SPI_SLAVE_MODE
 
 #if defined(USI_SPI_SS_INT0)
 ISR( INT0_vect )
@@ -84,6 +92,8 @@ ISR( INT0_vect )
 ISR( INT1_vect )
 #elif defined(USI_SPI_SS_PCINT)
 ISR( PCINT_vect )
+#else
+#error Something is wrong
 #endif
 {
 	if( isSelected() )
@@ -101,7 +111,8 @@ ISR( USI_OVERFLOW_vect )
 {
 	unsigned char data = USIDR;
 	USIDR = USI_SPI_callback( data );
-//	USIDR = ~data;
 	USISR =  _BV(USIOIF); //reser interrupt flag
 }
+
+#endif /* end of USI_SPI_SLAVE_MODE */
 
