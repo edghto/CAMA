@@ -6,11 +6,17 @@
 
 void CAT52320_Init( void )
 {
-    CAT25320_DDR |= CAT25320_SCK | CAT25320_SI;
+	USI_SPI_Init();
+	CAT25320_DDR |= CAT25320_NCS | CAT25320_NHOLD | CAT25320_NWP;
+	CAT52320_DESELECT();
+
+/*
+	//Left as reference for futre use, i.e. software implememtnation
+    CAT25320_DDR |= CAT25320_SCK | CAT25320_SI; // SI == MOSI
     CAT25320_DDR |= CAT25320_NHOLD | CAT25320_NCS | CAT25320_NWP;
     CAT25320_PORT |= CAT25320_NHOLD | CAT25320_NCS | CAT25320_NWP;
-
     CAT25320_PORT &= ~CAT25320_SCK;
+*/
 }
 
 CAT52320_Error CAT52320_WriteStatusRegister( unsigned char StatusRegister )
@@ -19,7 +25,7 @@ CAT52320_Error CAT52320_WriteStatusRegister( unsigned char StatusRegister )
     unsigned char msg[2] = { CAT52320_OP_WRSR, StatusRegister };
 
     CAT52320_SELECT()
-    if( spi_transfer( msg, 2 ) )
+    if( USI_SPI_Transfer( msg, 2 ) )
     {
         error = CAT52320_ERROR;
     }
@@ -34,7 +40,7 @@ CAT52320_Error CAT52320_ReadStatusRegister( unsigned char* StatusRegister )
     unsigned char msg[2] = { CAT52320_OP_RDSR, *StatusRegister };
 
     CAT52320_SELECT()
-    if( spi_transfer( msg, 2 ) )
+    if( USI_SPI_Transfer( msg, 2 ) )
     {
         error = CAT52320_ERROR;
     }
@@ -51,7 +57,7 @@ CAT52320_Error CAT52320_EnableWriteOpertation( void )
     unsigned char msg[1] = { CAT52320_OP_WREN };
 
     CAT52320_SELECT()
-    if( spi_transfer( msg, 1 ) )
+    if( USI_SPI_Transfer( msg, 1 ) )
     {
         error = CAT52320_ERROR;
     }
@@ -66,7 +72,7 @@ CAT52320_Error CAT52320_DisableWriteOpertation( void )
     unsigned char msg[1] = { CAT52320_OP_WRDI };
 
     CAT52320_SELECT()
-    if( spi_transfer( msg, 1 ) )
+    if( USI_SPI_Transfer( msg, 1 ) )
     {
         error = CAT52320_ERROR;
     }
@@ -85,7 +91,7 @@ CAT52320_Error CAT52320_ReadMemory( unsigned char* buffer, unsigned int size )
     return CAT52320_ERROR;
 }
 
-CAT52320_Bool CAT52320_isRead( void )
+CAT52320_Bool CAT52320_isReady( void )
 {
     CAT52320_Bool ready = CAT52320_FALSE;
     unsigned char statusReg;

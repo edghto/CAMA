@@ -9,8 +9,8 @@
 #define CAT25320_SCK   _BV(PB7)
 #define CAT25320_SI    _BV(PB6)  //PB6 (DO/PCINT6)
 #define CAT25320_SO    _BV(PB5)  //PB5 (DI/SDA/PCINT5)
-#define CAT25320_NHOLD _BV(PB4)
-#define CAT25320_NCS   _BV(PB3)
+#define CAT25320_NHOLD _BV(PB3)
+#define CAT25320_NCS   _BV(PB4)
 #define CAT25320_NWP   _BV(PB2)
 
 typedef enum
@@ -71,7 +71,7 @@ CAT52320_Error CAT52320_WriteMemory( unsigned char* buffer, unsigned int size );
 
 CAT52320_Error CAT52320_ReadMemory( unsigned char* buffer, unsigned int size );
 
-CAT52320_Bool CAT52320_isRead( void );
+CAT52320_Bool CAT52320_isReady( void );
 
 CAT52320_Error CAT52320_EnableWriteProtection( void );
 
