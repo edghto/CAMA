@@ -13,6 +13,9 @@
 #define CAT25320_NCS   _BV(PB4)
 #define CAT25320_NWP   _BV(PB2)
 
+#define CAT52320_ADDRESS_LOWBITS(addr) ((uint8_t) addr & 0xff )
+#define CAT52320_ADDRESS_HIGHBITS(addr) ((uint8_t) ( addr >> 8 ) )
+
 typedef enum
 {
     CAT52320_WPEN = 0b10000000,
@@ -52,24 +55,28 @@ typedef enum
     CAT52320_OP_WRITE = 0b00000010
 } CAT52320_Operations;
 
-typedef struct
-{
-    int i;
-}CAT52320_data;
 
 void CAT52320_Init( void );
 
-CAT52320_Error CAT52320_WriteStatusRegister( unsigned char StatusRegister );
+CAT52320_Error CAT52320_WriteStatusRegister( uint8_t StatusRegister );
 
-CAT52320_Error CAT52320_ReadStatusRegister( unsigned char* StatusRegister );
+CAT52320_Error CAT52320_ReadStatusRegister( uint8_t* StatusRegister );
 
 CAT52320_Error CAT52320_EnableWriteOpertation( void );
 
 CAT52320_Error CAT52320_DisableWriteOpertation( void );
 
-CAT52320_Error CAT52320_WriteMemory( unsigned char* buffer, unsigned int size );
+/*
+ * It will write only one page (32 bytes). If the size exceeds on page size
+ * the write will roll over to the beginning of current page.
+ */
+CAT52320_Error CAT52320_WriteMemoryPage( uint16_t address, uint8_t* buffer, uint16_t size );
 
-CAT52320_Error CAT52320_ReadMemory( unsigned char* buffer, unsigned int size );
+/*
+ * If read will reach the highest memory address, it will 
+ * roll over and continue to read from the lowest address.
+ */
+CAT52320_Error CAT52320_ReadMemory( uint16_t address, uint8_t* buffer, uint16_t size );
 
 CAT52320_Bool CAT52320_isReady( void );
 
