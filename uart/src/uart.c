@@ -14,8 +14,8 @@ static CircBuffer_t gInputCircBuffer;
 void UART_Init( unsigned int baud )
 {
     /* Set baud rate */
-    UBRRH = ( unsigned char ) ( baud >> 8 );
-    UBRRL = ( unsigned char ) baud;
+    UBRRH = ( uint8_t ) ( baud >> 8 );
+    UBRRL = ( uint8_t ) baud;
 
     /* Enable receiver and transmitter */
     UCSRB = ( 1 << RXEN ) | ( 1 << TXEN );
