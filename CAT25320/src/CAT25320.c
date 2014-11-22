@@ -58,7 +58,7 @@ CAT52320_Error CAT52320_EnableWriteOpertation( void )
     CAT52320_Error error = CAT52320_NOERROR;
     uint8_t msg[1] = { CAT52320_OP_WREN };
 
-    CAT52320_SELECT()
+    CAT52320_SELECT();
     if( USI_SPI_Transfer( msg, 1 ) )
     {
         error = CAT52320_ERROR;
@@ -73,7 +73,7 @@ CAT52320_Error CAT52320_DisableWriteOpertation( void )
     CAT52320_Error error = CAT52320_NOERROR;
     uint8_t msg[1] = { CAT52320_OP_WRDI };
 
-    CAT52320_SELECT()
+    CAT52320_SELECT();
     if( USI_SPI_Transfer( msg, 1 ) )
     {
         error = CAT52320_ERROR;
@@ -91,7 +91,7 @@ static CAT52320_Error CAT52320_MemoryRW( CAT52320_Operations op, uint16_t addres
 		CAT52320_ADDRESS_LOWBITS(address)
 	};
 
-	CAT52320_SELECT()
+	CAT52320_SELECT();
 	if( USI_SPI_Transfer( msg, 1 ) )
 	{
 		return CAT52320_ERROR;
@@ -130,12 +130,10 @@ CAT52320_Bool CAT52320_isReady( void )
     CAT52320_Bool ready = CAT52320_FALSE;
     uint8_t statusReg;
 
-    CAT52320_SELECT()
     if( CAT52320_NOERROR == CAT52320_ReadStatusRegister( &statusReg ) )
     {
         ready = statusReg & CAT52320_NRDY ? CAT52320_FALSE : CAT52320_TRUE;
     }
-    CAT52320_DESELECT();
 
     return ready;
 }
@@ -145,13 +143,11 @@ CAT52320_Error CAT52320_EnableWriteProtection( void )
     CAT52320_Error error = CAT52320_ERROR;
     uint8_t statusReg;
 
-    CAT52320_SELECT()
     if( CAT52320_NOERROR != CAT52320_ReadStatusRegister( &statusReg ) )
     {
         statusReg |= CAT52320_WPEN;
         error = CAT52320_WriteStatusRegister( statusReg );
     }
-    CAT52320_DESELECT();
 
     return error;
 }
@@ -161,13 +157,11 @@ CAT52320_Error CAT52320_DisableWriteProtection( void )
     CAT52320_Error error = CAT52320_ERROR;
     uint8_t statusReg;
 
-    CAT52320_SELECT()
     if( CAT52320_NOERROR == CAT52320_ReadStatusRegister( &statusReg ) )
     {
         statusReg &= ~CAT52320_WPEN;
         error = CAT52320_WriteStatusRegister( statusReg );
     }
-    CAT52320_DESELECT();
 
     return error;
 }
@@ -177,14 +171,12 @@ CAT52320_Error CAT52320_setBlockProtection( CAT52320_BlockProtectionRange range 
     CAT52320_Error error = CAT52320_ERROR;
     uint8_t statusReg;
 
-    CAT52320_SELECT()
     if( CAT52320_NOERROR == CAT52320_ReadStatusRegister( &statusReg ) )
     {
         statusReg &= ~( CAT52320_BP1 | CAT52320_BP2 );
         statusReg |= ( range << 2 );
         error = CAT52320_WriteStatusRegister( statusReg );
     }
-    CAT52320_DESELECT();
 
     return error;
 }
