@@ -7,7 +7,7 @@
 #error F_CPU is required
 #endif
 
-#define UART_BAUD 2400L
+#define UART_BAUD 9600L
 #define UART_UBBR_VALUE ((F_CPU/(UART_BAUD<<4))-1)
 
 #define UART_DELAY 10
