@@ -16,6 +16,13 @@
 #define CAT52320_ADDRESS_LOWBITS(addr) ((uint8_t) addr & 0xff )
 #define CAT52320_ADDRESS_HIGHBITS(addr) ((uint8_t) ( addr >> 8 ) )
 
+/*
+ * WARNING!
+ * Perofrming any write operation to memory or status register
+ * requires enabling write with CAT52320_EnableWriteOpertation
+ * function.
+ */
+
 typedef enum
 {
     CAT52320_WPEN = 0b10000000,
@@ -73,7 +80,7 @@ CAT52320_Error CAT52320_DisableWriteOpertation( void );
 CAT52320_Error CAT52320_WriteMemoryPage( uint16_t address, uint8_t* buffer, uint16_t size );
 
 /*
- * If read will reach the highest memory address, it will 
+ * If read will reach the highest memory address, it will
  * roll over and continue to read from the lowest address.
  */
 CAT52320_Error CAT52320_ReadMemory( uint16_t address, uint8_t* buffer, uint16_t size );
