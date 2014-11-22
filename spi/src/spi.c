@@ -14,7 +14,7 @@ static inline unsigned char isSelected()
 	s = PIND & _BV(PD3);
 #elif defined(USI_SPI_SS_PCINT)
 	s = PINB & ( 1 << USI_SPI_SS_PCINT_N );
-#endif 
+#endif
 
 #ifdef USI_SPI_USE_NCS
 	return 0 == s;
@@ -78,7 +78,9 @@ unsigned char USI_SPI_Transfer( unsigned char* msg, unsigned int msg_size )
     {
         *msg = USI_SPI_TransferByte( *msg );
         ++msg;
+#ifdef USI_SPI_ENABLE_BYTE_DELAY
 		_delay_ms( USI_SPI_BYTE_DELAY );
+#endif
     } while (--msg_size);
 
     return 0;

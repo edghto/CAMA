@@ -7,10 +7,16 @@
 #define USI_SPI_USCK _BV(PB7)
 
 /*
+ * Enables delay between sending next byte.
+ */
+//#define USI_SPI_ENABLE_BYTE_DELAY
+
+/*
  * Delay in miliseconds between transfer of next byte.
- * Only for Master mode, but make notice, that for correct working, 
- * Slave mode also requires some delay, but it have to be managed 
+ * Only for Master mode, but make notice, that for correct working,
+ * Slave mode also requires some delay, but it have to be managed
  * by master.
+ * Requires USI_SPI_ENABLE_BYTE_DELAY to be defined.
  */
 #define USI_SPI_BYTE_DELAY 200
 
@@ -32,7 +38,7 @@
 //#define USI_SPI_SS_PCINT
 
 /*
- * When using USI_SPI_SS_PCINT as SS pin you need to define 
+ * When using USI_SPI_SS_PCINT as SS pin you need to define
  * Only values from 0 to 7 are valid, but may noticed, that
  * PICNT pins overlaps with SPI pins (DO, DI, USCK), so in
  * fact only 0-4 pins can be used.
@@ -41,7 +47,7 @@
 
 /*
  * When using Slave mode.
- * You can change behavior of SS pin to work as Not Select Cable. 
+ * You can change behavior of SS pin to work as Not Select Cable.
  * So HIGH state of SS pin will indicate that uC is NOT selected,
  * whereas LOW state will indicate uC is selected.
  * To enable this feature uncomment following define.
@@ -67,11 +73,17 @@
 	#endif
 #endif
 
+#ifdef USI_SPI_ENABLE_BYTE_DELAY
+    #ifndef USI_SPI_BYTE_DELAY
+        #error USI_SPI_BYTE_DELAY needs to be defined
+    #endif
+#endif
+
 /*
- * This is a callback declaration which has to be implemented 
+ * This is a callback declaration which has to be implemented
  * by user, when utilizing Slave mode.
  * This callback will be invoked after every 8bit transmission.
- * The parameter is 8bit data received thru SPI. It should 
+ * The parameter is 8bit data received thru SPI. It should
  * return 8bit that should be transmitted back to Master.
  */
 #ifdef USI_SPI_SLAVE_MODE
