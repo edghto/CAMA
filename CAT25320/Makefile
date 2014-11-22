@@ -13,5 +13,7 @@ DEPS=
 #library name
 LIB_TARGET=libcat25320.a
 
+F_CPU=14745600UL
+
 include ../common/common.mk
 
