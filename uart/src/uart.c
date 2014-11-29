@@ -62,7 +62,7 @@ unsigned int UART_Receive( char* data, unsigned int len )
             data[i++] = c;
         }
         else
-            continue;
+            break;
 
         if( c == '\n' )
             break;
