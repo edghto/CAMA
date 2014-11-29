@@ -36,8 +36,8 @@ $(AS_OBJS):obj/%.o:src/%.S
 
 #for building lib that this project dependece of
 lib%.a:
-	-@echo LIB_DEST=$(shell pwd) $(MAKE) -C ../$* $@
-	-@LIB_DEST=$(shell pwd) $(MAKE) -C ../$* $@
+	-@echo F_CPU=$(F_CPU) LIB_DEST=$(shell pwd) $(MAKE) -C ../$* $@
+	-@F_CPU=$(F_CPU) LIB_DEST=$(shell pwd) $(MAKE) -C ../$* $@
 
 $(LIB_TARGET): $(OBJS) $(AS_OBJS) $(LIBS) $(DEPS)
 	-@echo ar rcs $(LIB_DEST)/$@ $(OBJS) $(AS_OBJS) $(LIBS)
